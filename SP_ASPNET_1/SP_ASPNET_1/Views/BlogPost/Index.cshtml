@@ -13,13 +13,14 @@
         <img src="@Html.AttributeEncode(Constants.POST_IMAGE_PREFIX + post.ImageUrl)" alt="post image preview" class="Post__Image">
         <div class="Post-Preview__Content">
             <h2>@post.Title</h2>
-            <p>By @post.Author on @post.DateTime.ToString(Constants.DISPLAY_DATETIME_FORMAT)</p>
+            <p>By @post.Author on @post.DateTime.ToString(Constants.DISPLAY_DATETIME_FORMAT) | Likes: <span id="likes-count-@post.BlogPostID">@post.Likes</span></p>
             <br>
             <p>@post.Content.Substring(0, 200)...</p>
         </div>
     </li>
     <li class="Posts__Item__Link">
         <button onClick="location.href='@Url.Action("SinglePost", new { id = @post.BlogPostID})'" class="c-btn">read more</button>
+        <button class="btn btn-primary like-button" data-post-id="@post.BlogPostID">Like</button>
         <hr class="Post__Hr" />
     </li>
     }
@@ -32,4 +33,32 @@
 else
 {
 <h1>There are no blog posts :-(</h1>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".like-button").on("click", function () {
+                let button = $(this);
+                let postId = $(this).attr("data-post-id");
+                button.prop("disabled", true);
+                $.ajax({
+                    url: "/api/BlogPosts/" + postId,
+                    method: "PUT",
+                    success: function () {
+                        button.text("LIKED!");
+                        let spanLikes = $("#likes-count-" + postId);
+                        console.log(spanLikes);
+                        let oldValue = parseInt(spanLikes.text());
+                        console.log(oldValue);
+                        spanLikes.text(oldValue + 1);
+                    },
+                    error: function () {
+                        button.prop("disabled", false);
+                    }
+                });
+            });
+        });
+    </script>
 }
