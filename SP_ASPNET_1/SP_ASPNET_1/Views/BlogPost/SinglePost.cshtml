@@ -11,7 +11,7 @@
 <div class="SinglePost">
     <img src="@Html.AttributeEncode(Constants.POST_IMAGE_PREFIX + Model.BlogPost.ImageUrl)" alt="@Path.GetFileNameWithoutExtension(Model.BlogPost.ImageUrl)" />
     <h2>new chills for summer</h2>
-    <p>By @Model.Author.ToString() on @Model.BlogPost.DateTime.ToString(Constants.DISPLAY_DATETIME_FORMAT)</p>
+    <p>By @Model.Author.ToString() on @Model.BlogPost.DateTime.ToString(Constants.DISPLAY_DATETIME_FORMAT) | Likes: <span id="likes-count-@Model.BlogPost.BlogPostID">@Model.BlogPost.Likes</span></p>
     <p>
         @Model.BlogPost.Content
     </p>
@@ -20,10 +20,42 @@
         @Html.ActionLink("Back to List", "Index") |
         @Html.ActionLink("Delete", "EditBlogPost", new { id = Model.BlogPost.BlogPostID }) |
     </p>
+    <div>
+        <button class="btn btn-primary like-button" data-post-id="@Model.BlogPost.BlogPostID">Like</button>
+    </div>
 </div> }
 else
 {
 <div class="SinglePost">
     <h2>There are no blog posts :-(</h2>
-</div>
+</div>}
+
+@*This code is duplicated from Index.cshtml, that's not good. Better to refactor this script to a separate js file *@
+
+@section scripts 
+{
+    <script>
+        $(document).ready(function () {
+            $(".like-button").on("click", function () {
+                let button = $(this);
+                let postId = $(this).attr("data-post-id");
+                button.prop("disabled", true);
+                $.ajax({
+                    url: "/api/BlogPosts/" + postId,
+                    method: "PUT",
+                    success: function () {
+                        button.text("LIKED!");
+                        let spanLikes = $("#likes-count-" + postId);
+                        console.log(spanLikes);
+                        let oldValue = parseInt(spanLikes.text());
+                        console.log(oldValue);
+                        spanLikes.text(oldValue + 1);
+                    },
+                    error: function () {
+                        button.prop("disabled", false);
+                    }
+                });
+            });
+        });
+    </script>
 }
