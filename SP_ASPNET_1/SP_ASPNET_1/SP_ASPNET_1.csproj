@@ -150,6 +150,10 @@
     <Compile Include="Migrations\202006112205156_Init.Designer.cs">
       <DependentUpon>202006112205156_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202007091710577_AddLikesToBlogPostModel.cs" />
+    <Compile Include="Migrations\202007091710577_AddLikesToBlogPostModel.Designer.cs">
+      <DependentUpon>202007091710577_AddLikesToBlogPostModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\BlogPost.cs" />
@@ -277,6 +281,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202006112205156_Init.resx">
       <DependentUpon>202006112205156_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007091710577_AddLikesToBlogPostModel.resx">
+      <DependentUpon>202007091710577_AddLikesToBlogPostModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
